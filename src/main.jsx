@@ -11,6 +11,7 @@ import {
   Tag,
 } from "lucide-react";
 import atomicHabitsImage from "./assets/atomic-habits.jpg";
+import { supabase } from "./supabaseClient";
 import "./styles.css";
 
 const books = [
@@ -105,16 +106,31 @@ function App() {
   const [mood, setMood] = useState("全部心情");
   const [query, setQuery] = useState("");
   const [reply, setReply] = useState("");
-  const [submittedReply, setSubmittedReply] = useState("");
+  const [replyStatus, setReplyStatus] = useState("idle");
+  const [replyError, setReplyError] = useState("");
 
-  const handleReplySubmit = (event) => {
+  const handleReplySubmit = async (event) => {
     event.preventDefault();
     const trimmedReply = reply.trim();
 
-    if (!trimmedReply) return;
+    if (!trimmedReply || replyStatus === "submitting") return;
 
-    setSubmittedReply(trimmedReply);
+    setReplyStatus("submitting");
+    setReplyError("");
+
+    const { error } = await supabase.from("booklist_replies").insert({
+      message: trimmedReply,
+    });
+
+    if (error) {
+      console.error("Failed to submit booklist reply:", error);
+      setReplyStatus("error");
+      setReplyError("送出失敗，請稍後再試。");
+      return;
+    }
+
     setReply("");
+    setReplyStatus("success");
   };
 
   const filteredBooks = useMemo(() => {
@@ -238,19 +254,26 @@ function App() {
             onChange={(event) => setReply(event.target.value)}
             placeholder="例如：我推薦《書名》，因為……"
             rows={5}
+            maxLength={2000}
+            disabled={replyStatus === "submitting"}
             required
           />
           <div className="reply-actions">
-            <span>{reply.length} 字</span>
-            <button type="submit" disabled={!reply.trim()}>
+            <span>{reply.length} / 2000 字</span>
+            <button type="submit" disabled={!reply.trim() || replyStatus === "submitting"}>
               <Send size={17} />
-              送出回覆
+              {replyStatus === "submitting" ? "送出中…" : "送出回覆"}
             </button>
           </div>
         </form>
-        {submittedReply && (
+        {replyStatus === "success" && (
           <p className="reply-success" role="status">
             謝謝你的推薦，回覆已送出。
+          </p>
+        )}
+        {replyStatus === "error" && (
+          <p className="reply-error" role="alert">
+            {replyError}
           </p>
         )}
       </section>

@@ -316,6 +316,11 @@ h1 {
   box-shadow: 0 0 0 3px rgba(82, 98, 71, 0.14);
 }
 
+.reply-form textarea:disabled {
+  background: #f2f4f2;
+  cursor: wait;
+}
+
 .reply-actions {
   display: flex;
   align-items: center;
@@ -376,6 +381,13 @@ h1 {
   .reply-success {
     grid-column: 1;
   }
+}
+
+.reply-error {
+  grid-column: 2;
+  margin: -12px 0 0;
+  color: #a13d32;
+  font-weight: 700;
 }
 
 @media (max-width: 620px) {
