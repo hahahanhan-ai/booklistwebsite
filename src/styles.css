@@ -25,7 +25,8 @@ body {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
@@ -254,9 +255,113 @@ h1 {
   text-align: center;
 }
 
+
+.reply-section {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.65fr) minmax(320px, 1.35fr);
+  gap: 28px;
+  margin-top: 32px;
+  padding: 28px;
+  border: 1px solid rgba(36, 48, 45, 0.17);
+  border-radius: 8px;
+  background: #fffaf0;
+}
+
+.reply-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: #526247;
+}
+
+.reply-heading h2 {
+  margin-bottom: 8px;
+  color: #1c2724;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.8rem;
+}
+
+.reply-heading p {
+  margin-bottom: 0;
+  color: #53615d;
+  line-height: 1.65;
+}
+
+.reply-form {
+  display: grid;
+  gap: 10px;
+}
+
+.reply-form label {
+  color: #33423e;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.reply-form textarea {
+  width: 100%;
+  min-height: 132px;
+  resize: vertical;
+  padding: 14px;
+  border: 1px solid rgba(36, 48, 45, 0.24);
+  border-radius: 6px;
+  outline: 0;
+  background: #ffffff;
+  color: #24302d;
+  line-height: 1.65;
+}
+
+.reply-form textarea:focus {
+  border-color: #526247;
+  box-shadow: 0 0 0 3px rgba(82, 98, 71, 0.14);
+}
+
+.reply-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.reply-actions span {
+  color: #68746f;
+  font-size: 0.86rem;
+}
+
+.reply-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 6px;
+  background: #26342f;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.reply-actions button:hover:not(:disabled) {
+  background: #42534d;
+}
+
+.reply-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.reply-success {
+  grid-column: 2;
+  margin: -12px 0 0;
+  color: #3f653f;
+  font-weight: 700;
+}
+
 @media (max-width: 980px) {
   .intro,
-  .controls {
+  .controls,
+  .reply-section {
     grid-template-columns: 1fr;
   }
 
@@ -266,6 +371,10 @@ h1 {
 
   .controls {
     position: static;
+  }
+
+  .reply-success {
+    grid-column: 1;
   }
 }
 

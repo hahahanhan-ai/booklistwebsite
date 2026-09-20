@@ -1,6 +1,15 @@
 import React, { useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { BookOpen, Clock3, Search, Sparkles, Star, Tag } from "lucide-react";
+import {
+  BookOpen,
+  Clock3,
+  MessageSquareText,
+  Search,
+  Send,
+  Sparkles,
+  Star,
+  Tag,
+} from "lucide-react";
 import atomicHabitsImage from "./assets/atomic-habits.jpg";
 import "./styles.css";
 
@@ -95,6 +104,18 @@ function App() {
   const [category, setCategory] = useState("全部");
   const [mood, setMood] = useState("全部心情");
   const [query, setQuery] = useState("");
+  const [reply, setReply] = useState("");
+  const [submittedReply, setSubmittedReply] = useState("");
+
+  const handleReplySubmit = (event) => {
+    event.preventDefault();
+    const trimmedReply = reply.trim();
+
+    if (!trimmedReply) return;
+
+    setSubmittedReply(trimmedReply);
+    setReply("");
+  };
 
   const filteredBooks = useMemo(() => {
     const keyword = query.trim().toLowerCase();
@@ -200,6 +221,39 @@ function App() {
           <p>換個關鍵字或放寬篩選，書架會重新打開。</p>
         </section>
       )}
+
+      <section className="reply-section" aria-labelledby="reply-title">
+        <div className="reply-heading">
+          <MessageSquareText size={22} />
+          <div>
+            <h2 id="reply-title">回覆推薦書單</h2>
+            <p>寫下你讀過的好書，或告訴我們想看到哪一類推薦。</p>
+          </div>
+        </div>
+        <form className="reply-form" onSubmit={handleReplySubmit}>
+          <label htmlFor="recommendation-reply">你的回覆</label>
+          <textarea
+            id="recommendation-reply"
+            value={reply}
+            onChange={(event) => setReply(event.target.value)}
+            placeholder="例如：我推薦《書名》，因為……"
+            rows={5}
+            required
+          />
+          <div className="reply-actions">
+            <span>{reply.length} 字</span>
+            <button type="submit" disabled={!reply.trim()}>
+              <Send size={17} />
+              送出回覆
+            </button>
+          </div>
+        </form>
+        {submittedReply && (
+          <p className="reply-success" role="status">
+            謝謝你的推薦，回覆已送出。
+          </p>
+        )}
+      </section>
     </main>
   );
 }
